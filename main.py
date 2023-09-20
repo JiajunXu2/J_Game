@@ -10,7 +10,14 @@ class Game:
     pygame.display.set_caption('J Game')
     self.DISPLAYSURF = pygame.display.set_mode((512, 760))
     self.clock = pygame.time.Clock()
-    """p = ['princess_1.png', 'princess_2.png', 'princess_3.png']
-    princess = random.choice(p)
-    self.img = pygame.image.load(f'E:\Projects\pygame\data\images\endpics\{princess}')
-    self.img_pos = [0, 0]"""
+    
+  def ending(self):
+    p = ['ending_1.png', 'ending_2.png', 'ending_3.png']
+    end = random.choice(p)
+    self.end_img = pygame.image.load(f'E:\Projects\pygame\data\images\endpics\{end}')
+    self.end_img_pos = [0, 0]
+    self.DISPLAYSURF.blit(self.end_img, self.end_img_pos)
+
+if __name__ == 'main':
+  new_game = Game()
+  new_game.run()
