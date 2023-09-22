@@ -10,6 +10,24 @@ class Game:
     pygame.display.set_caption('J Game')
     self.DISPLAYSURF = pygame.display.set_mode((512, 760))
     self.clock = pygame.time.Clock()
+
+  def run(self):
+    while True:
+      # self.DISPLAYSURF.blit(self.img, self.img_pos)
+
+      for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+          pygame.quit()
+          sys.exit()
+        if event.type == pygame.KEYDOWN:
+          print("key down")
+        if event.type == pygame.KEYUP:
+          print("key up")
+        if event.type == pygame.MOUSEMOTION:
+          print(event.pos)
+        pygame.display.update()
+        # 10 frames per second
+        self.clock.tick(10)
     
   def ending(self):
     p = ['ending_1.png', 'ending_2.png', 'ending_3.png']
