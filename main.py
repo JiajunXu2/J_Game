@@ -3,6 +3,10 @@ import sys
 import random
 from scripts.entities import PhysicsEntity
 from scripts.utility import get_img
+from scripts.spritesheet import flip, load_spritesheet
+
+class Player:
+  pass
 
 class Game:
   def __init__(self):
