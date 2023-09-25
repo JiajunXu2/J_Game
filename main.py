@@ -5,8 +5,16 @@ from scripts.entities import PhysicsEntity
 from scripts.utility import get_img
 from scripts.spritesheet import flip, load_spritesheet
 
-class Player:
-  pass
+class Player(pygame.sprite.Sprite):
+  GRAVITY = 1
+
+  def __init__(self, x, y, width, height) -> None:
+    self.rect = pygame.Rect(x, y , width, height)
+    self.x_velocity = x
+    self.y_velocity = y
+    self.direction = "left"
+    self.fall_count = 0
+    self.animation_count = 0
 
 class Game:
   def __init__(self):
