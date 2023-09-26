@@ -5,17 +5,6 @@ from scripts.entities import PhysicsEntity
 from scripts.utility import get_img
 from scripts.spritesheet import flip, load_spritesheet
 
-class Player(pygame.sprite.Sprite):
-  GRAVITY = 1
-
-  def __init__(self, x, y, width, height) -> None:
-    self.rect = pygame.Rect(x, y , width, height)
-    self.x_velocity = x
-    self.y_velocity = y
-    self.direction = "left"
-    self.fall_count = 0
-    self.animation_count = 0
-
 class Game:
   def __init__(self):
     pygame.init()
@@ -39,7 +28,7 @@ class Game:
           print(event.pos)
         pygame.display.update()
         # 10 frames per second
-        self.clock.tick(10)
+        self.clock.tick(40)
     
   def ending(self):
     p = ['ending_1.png', 'ending_2.png', 'ending_3.png']
@@ -48,6 +37,6 @@ class Game:
     self.end_img_pos = [0, 0]
     self.DISPLAYSURF.blit(self.end_img, self.end_img_pos)
 
-if __name__ == 'main':
+if __name__ == '__main__':
   new_game = Game()
   new_game.run()
