@@ -14,6 +14,7 @@ class Player(pygame.sprite.Sprite):
     self.direction = "left"
     self.fall_count = 0
     self.animation_count = 0
+    self.mask = None
   
   def move(self, dy, dx):
     self.rect.x += dx
@@ -35,6 +36,18 @@ class Player(pygame.sprite.Sprite):
       spritesheet = "run"
     spritesheet_name = spritesheet + "_" + self.direction
     sprites = self.SPRITES[spritesheet_name]
+    sprite_index = (self.animation_count // self.ANIMATION_DELAY) % len(sprites)
+    self.sprite = sprites[sprite_index]
+    self.animation_count += 1
+    self.update()
+
+  def update(self):
+    # the rectangle we're using is constantly adjusting to our character
+    self.rect = self.sprite.get_rect(topLeft = (self.rect.x, self.rect.y))
+    # a mask is a mapping of all the pixel that exist in the sprite
+    # masks allow us to preform pixel perfect collision
+    # whereas rectangle collision is clunky because the rectangle is langer than our sprite
+    self.mask = pygame.mask.from_surface(self.sprite) 
 
   # called once every frame to control movement and update directions
   def loop(self, fps):

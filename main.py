@@ -26,7 +26,7 @@ class Game:
           print(event.pos)
         pygame.display.update()
         # 10 frames per second
-        self.clock.tick(40)
+        self.clock.tick(20)
     
   def ending(self):
     p = ['ending_1.png', 'ending_2.png', 'ending_3.png']
