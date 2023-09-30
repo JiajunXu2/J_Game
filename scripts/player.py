@@ -4,7 +4,7 @@ from scripts.spritesheet import load_spritesheet
 class Player(pygame.sprite.Sprite):
   GRAVITY = 1
   COLOR = (255, 0, 0)
-  SPRITES = load_spritesheet("images", "pinkie", 32, 32, True)
+  SPRITES = load_spritesheet("images", "player_char", 32, 32, True)
   ANIMATION_DELAY = 3
 
   def __init__(self, x, y, width, height) -> None:
@@ -12,7 +12,7 @@ class Player(pygame.sprite.Sprite):
     self.x_velocity = x
     self.y_velocity = y
     self.direction = "left"
-    self.fall_count = 0
+    self.fall_count = 0 # manages the gravity speed
     self.animation_count = 0
     self.mask = None
   
@@ -55,4 +55,4 @@ class Player(pygame.sprite.Sprite):
     self.update_sprite()
 
   def draw(self, window):
-    pygame.draw.rect(window, self.COLOR, self.rect)
+    window.blit(self.sprite, (self.rect.x, self.rect.y))
