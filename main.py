@@ -1,13 +1,100 @@
 import pygame
 import sys
 import random
+import pygame
+from os.path import join, isfile
+from os import listdir
 from scripts.entities import PhysicsEntity
-from scripts.utility import get_img
-from scripts.spritesheet import flip, load_spritesheet
+from scripts.utility import get_img, handle_move
+
 
 WIDTH = 800
 HEIGHT = 450
 fps = 20
+
+def load_spritesheet(dir1, dir2, height, width, direction = False):
+    path = join("E:\Projects\J_Game\data", dir1, dir2)
+    print(path)
+    images = [f for f in listdir(path) if isfile(join(path, f))]
+
+    all_sprites = {}
+
+    for img in images:
+        sprite_sheet = pygame.image.load(join(path, img)).convert_alpha()
+
+        sprites = []
+        for i in range(sprite_sheet.get_width()// width):
+            surface = pygame.Surface((width, height), pygame.SRCALPHA, 32)
+            rect = pygame.Rect(i * width, 0, width, height)
+            surface.blit(sprite_sheet, (0, 0), rect)
+            sprites.append(surface)
+
+        if direction:
+            all_sprites[img.replace(".png", "") + "_right"] + sprites
+            all_sprites[img.replace(".png", "") + "_left"] + flip(sprites)
+        else:
+            all_sprites[img.replace(".png", "")] + sprites
+
+    return all_sprites
+
+class Player(pygame.sprite.Sprite):
+  GRAVITY = 1
+  COLOR = (255, 0, 0)
+  SPRITES = load_spritesheet("images", "player_char", 32, 32, True)
+  ANIMATION_DELAY = 3
+
+  def __init__(self, x, y, width, height) -> None:
+    self.rect = pygame.Rect(x, y , width, height)
+    self.x_velocity = x
+    self.y_velocity = y
+    self.direction = "left"
+    self.fall_count = 0 # manages the gravity speed
+    self.animation_count = 0
+    self.mask = None
+  
+  def move(self, dy, dx):
+    self.rect.x += dx
+    self.rect.y += dy
+
+  def move_left(self, velocity):
+    self.x_velocity = -velocity
+    if self.direction != "left":
+      self.direction = "left"
+
+  def move_right(self, velocity):
+    self.y_velocity = velocity
+    if self.direction != "right":
+      self.direction = "right"
+
+  def update_sprite(self):
+    spritesheet = "idle"
+    if self.x_velocity != 0:
+      spritesheet = "run"
+    spritesheet_name = spritesheet + "_" + self.direction
+    sprites = self.SPRITES[spritesheet_name]
+    sprite_index = (self.animation_count // self.ANIMATION_DELAY) % len(sprites)
+    self.sprite = sprites[sprite_index]
+    self.animation_count += 1
+    self.update()
+
+  def update(self):
+    # the rectangle we're using is constantly adjusting to our character
+    self.rect = self.sprite.get_rect(topLeft = (self.rect.x, self.rect.y))
+    # a mask is a mapping of all the pixel that exist in the sprite
+    # masks allow us to preform pixel perfect collision
+    # whereas rectangle collision is clunky because the rectangle is langer than our sprite
+    self.mask = pygame.mask.from_surface(self.sprite) 
+
+  # called once every frame to control movement and update directions
+  def loop(self, fps):
+    self.move(self.x_velocity, self.y_velocity)
+    self.update_sprite()
+
+  def draw(self, window):
+    window.blit(self.sprite, (self.rect.x, self.rect.y))
+
+def flip(sprites):
+    return [pygame.transform.flip(sprite, True, False) for sprite in sprites]
 
 class Game:
   def __init__(self):
@@ -17,9 +104,10 @@ class Game:
     self.clock = pygame.time.Clock()
 
   def run(self):
+    player = Player(100, 100, 50, 50)
     while True:
-      self.DISPLAYSURF.blit(get_img("backgrounds/sky.png"), [0, 0])
-      self.DISPLAYSURF.blit(get_img("backgrounds/ground.png"), [0, 300])
+      #self.DISPLAYSURF.blit(get_img("backgrounds/sky.png"), [0, 0])
+      #self.DISPLAYSURF.blit(get_img("backgrounds/ground.png"), [0, 300])
       for event in pygame.event.get():
         if event.type == pygame.QUIT:
           pygame.quit()
@@ -30,9 +118,12 @@ class Game:
           print("key up")
         if event.type == pygame.MOUSEMOTION:
           print(event.pos)
-        pygame.display.update()
         self.clock.tick(fps)
-    
+      pygame.display.update()
+      player.loop(fps)
+      handle_move(player)
+      self.DISPLAYSURF.blit(player)
+
   def ending(self):
     p = ['ending_1.png', 'ending_2.png', 'ending_3.png']
     end = random.choice(p)
