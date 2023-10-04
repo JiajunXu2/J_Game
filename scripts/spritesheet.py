@@ -1,4 +1,4 @@
-"""import pygame
+import pygame
 from os.path import join, isfile
 from os import listdir
 
@@ -13,7 +13,7 @@ def load_spritesheet(dir1, dir2, height, width, direction = False):
     all_sprites = {}
 
     for img in images:
-        sprite_sheet = pygame.image.load(join(path, img)).convert_alpha()
+        sprite_sheet = pygame.image.load(join(path, img)).convert()
 
         sprites = []
         for i in range(sprite_sheet.get_width()// width):
@@ -28,4 +28,4 @@ def load_spritesheet(dir1, dir2, height, width, direction = False):
         else:
             all_sprites[img.replace(".png", "")] + sprites
 
-    return all_sprites"""
+    return all_sprites

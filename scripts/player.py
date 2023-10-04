@@ -1,7 +1,7 @@
 import pygame
 from scripts.spritesheet import load_spritesheet
 
-"""class Player(pygame.sprite.Sprite):
+class Player(pygame.sprite.Sprite):
   GRAVITY = 1
   COLOR = (255, 0, 0)
   SPRITES = load_spritesheet("images", "player_char", 32, 32, True)
@@ -55,4 +55,4 @@ from scripts.spritesheet import load_spritesheet
     self.update_sprite()
 
   def draw(self, window):
-    window.blit(self.sprite, (self.rect.x, self.rect.y))"""
+    window.blit(self.sprite, (self.rect.x, self.rect.y))

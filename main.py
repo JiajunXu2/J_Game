@@ -7,35 +7,39 @@ from os import listdir
 from scripts.entities import PhysicsEntity
 from scripts.utility import get_img, handle_move
 
-
 WIDTH = 800
 HEIGHT = 450
 fps = 20
+player_velocity = 5
+
+pygame.init()
+pygame.display.set_caption('J Game')
+DISPLAYSURF = pygame.display.set_mode((WIDTH, HEIGHT))
 
 def load_spritesheet(dir1, dir2, height, width, direction = False):
-    path = join("E:\Projects\J_Game\data", dir1, dir2)
-    print(path)
-    images = [f for f in listdir(path) if isfile(join(path, f))]
+  path = join("E:\Projects\J_Game\data", dir1, dir2)
+  print(path)
+  images = [f for f in listdir(path) if isfile(join(path, f))]
 
-    all_sprites = {}
+  all_sprites = {}
 
-    for img in images:
-        sprite_sheet = pygame.image.load(join(path, img)).convert_alpha()
+  for img in images:
+      sprite_sheet = pygame.image.load(join(path, img)).convert_alpha()
 
-        sprites = []
-        for i in range(sprite_sheet.get_width()// width):
-            surface = pygame.Surface((width, height), pygame.SRCALPHA, 32)
-            rect = pygame.Rect(i * width, 0, width, height)
-            surface.blit(sprite_sheet, (0, 0), rect)
-            sprites.append(surface)
+      sprites = []
+      for i in range(sprite_sheet.get_width()// width):
+          surface = pygame.Surface((width, height), pygame.SRCALPHA, 32)
+          rect = pygame.Rect(i * width, 0, width, height)
+          surface.blit(sprite_sheet, (0, 0), rect)
+          sprites.append(surface)
 
-        if direction:
-            all_sprites[img.replace(".png", "") + "_right"] + sprites
-            all_sprites[img.replace(".png", "") + "_left"] + flip(sprites)
-        else:
-            all_sprites[img.replace(".png", "")] + sprites
+      if direction:
+          all_sprites[img.replace(".png", "") + "_right"] + sprites
+          all_sprites[img.replace(".png", "") + "_left"] + flip(sprites)
+      else:
+          all_sprites[img.replace(".png", "")] + sprites
 
-    return all_sprites
+  return all_sprites
 
 class Player(pygame.sprite.Sprite):
   GRAVITY = 1
@@ -94,43 +98,40 @@ class Player(pygame.sprite.Sprite):
     window.blit(self.sprite, (self.rect.x, self.rect.y))
 
 def flip(sprites):
-    return [pygame.transform.flip(sprite, True, False) for sprite in sprites]
+  return [pygame.transform.flip(sprite, True, False) for sprite in sprites]
 
-class Game:
-  def __init__(self):
-    pygame.init()
-    pygame.display.set_caption('J Game')
-    self.DISPLAYSURF = pygame.display.set_mode((WIDTH, HEIGHT))
-    self.clock = pygame.time.Clock()
+def draw(display, image, coordinates):
+  display.blit(image, coordinates)
+  pygame.display.update()
 
-  def run(self):
-    player = Player(100, 100, 50, 50)
-    while True:
-      #self.DISPLAYSURF.blit(get_img("backgrounds/sky.png"), [0, 0])
-      #self.DISPLAYSURF.blit(get_img("backgrounds/ground.png"), [0, 300])
-      for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-          pygame.quit()
-          sys.exit()
-        if event.type == pygame.KEYDOWN:
-          print("key down")
-        if event.type == pygame.KEYUP:
-          print("key up")
-        if event.type == pygame.MOUSEMOTION:
-          print(event.pos)
-        self.clock.tick(fps)
-      pygame.display.update()
-      player.loop(fps)
-      handle_move(player)
-      self.DISPLAYSURF.blit(player)
+def main(display):
+  clock = pygame.time.Clock()
+  player = Player(100, 100, 50, 50)
+  while True:
+    sky = get_img("backgrounds/sky.png")
+    ground = get_img("backgrounds/ground.png")
+    for event in pygame.event.get():
+      if event.type == pygame.QUIT:
+        pygame.quit()
+        sys.exit()
+      if event.type == pygame.KEYDOWN:
+        print("key down")
+      if event.type == pygame.KEYUP:
+        print("key up")
+      if event.type == pygame.MOUSEMOTION:
+        print(event.pos)
+      clock.tick(fps)
+    draw(display, sky, [0, 0])
+    draw(display, ground, [0, 300])
+    player.loop(fps)
+    handle_move(player)
 
-  def ending(self):
-    p = ['ending_1.png', 'ending_2.png', 'ending_3.png']
-    end = random.choice(p)
-    self.end_img = pygame.image.load(f'E:\Projects\pygame\data\images\endpics\{end}')
-    self.end_img_pos = [0, 0]
-    self.DISPLAYSURF.blit(self.end_img, self.end_img_pos)
+def ending(self):
+  p = ['ending_1.png', 'ending_2.png', 'ending_3.png']
+  end = random.choice(p)
+  self.end_img = pygame.image.load(f'E:\Projects\pygame\data\images\endpics\{end}')
+  self.end_img_pos = [0, 0]
+  self.DISPLAYSURF.blit(self.end_img, self.end_img_pos)
 
 if __name__ == '__main__':
-  new_game = Game()
-  new_game.run()
+  main(DISPLAYSURF)
