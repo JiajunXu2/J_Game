@@ -11,7 +11,6 @@ WIDTH = 800
 HEIGHT = 450
 fps = 20
 
-
 pygame.init()
 pygame.display.set_caption('J Game')
 DISPLAYSURF = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -30,7 +29,7 @@ def load_spritesheet(dir1, dir2, height, width, direction = False):
       sprite_sheet = pygame.image.load(join(path, img)).convert_alpha()
 
       sprites = []
-      for i in range(sprite_sheet.get_width()// width):
+      for i in range(sprite_sheet.get_width() // width):
           surface = pygame.Surface((width, height), pygame.SRCALPHA, 32)
           rect = pygame.Rect(i * width, 0, width, height)
           surface.blit(sprite_sheet, (0, 0), rect)
@@ -48,13 +47,13 @@ class Player(pygame.sprite.Sprite):
   GRAVITY = 1
   COLOR = (255, 0, 0)
   SPRITES = load_spritesheet("images", "player_char", 32, 32, True)
-  ANIMATION_DELAY = 3
+  ANIMATION_DELAY = 5
 
   def __init__(self, x, y, width, height) -> None:
-    self.rect = pygame.Rect(x, y , width, height)
-    self.x_velocity = x
-    self.y_velocity = y
-    self.direction = "left"
+    self.rect = pygame.Rect(x, y, width, height)
+    self.x_velocity = 0
+    self.y_velocity = 0
+    self.direction = "right"
     self.fall_count = 0 # manages the gravity speed
     self.animation_count = 0
     self.mask = None
@@ -67,11 +66,13 @@ class Player(pygame.sprite.Sprite):
     self.x_velocity = -velocity
     if self.direction != "left":
       self.direction = "left"
+      self.animation_count = 0
 
   def move_right(self, velocity):
-    self.y_velocity = velocity
+    self.x_velocity = velocity
     if self.direction != "right":
       self.direction = "right"
+      self.animation_count = 0
 
   def update_sprite(self):
     spritesheet = "idle"
@@ -86,7 +87,7 @@ class Player(pygame.sprite.Sprite):
 
   def update(self):
     # the rectangle we're using is constantly adjusting to our character
-    self.rect = self.sprite.get_rect(topLeft = (self.rect.x, self.rect.y))
+    self.rect = self.sprite.get_rect(topleft=(self.rect.x, self.rect.y))
     # a mask is a mapping of all the pixel that exist in the sprite
     # masks allow us to preform pixel perfect collision
     # whereas rectangle collision is clunky because the rectangle is langer than our sprite
@@ -103,7 +104,7 @@ class Player(pygame.sprite.Sprite):
 def draw(display, image, coordinates):
   display.blit(image, coordinates)
   pygame.display.update()
-
+  
 def draw_player(display, player):
   player.draw(display)
   pygame.display.update()
@@ -125,13 +126,12 @@ def main(display):
       if event.type == pygame.MOUSEMOTION:
         print(event.pos)
       clock.tick(fps)
-    draw(display, sky, [0, 0])
-    draw(display, ground, [0, 300])
-    draw_player(display, player)
+    #draw(display, sky, [0, 0])
+    #draw(display, ground, [0, 300])
     player.loop(fps)
     handle_move(player)
-
-
+    draw_player(display, player)
+    
 def ending(self):
   p = ['ending_1.png', 'ending_2.png', 'ending_3.png']
   end = random.choice(p)

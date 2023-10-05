@@ -23,9 +23,9 @@ def load_spritesheet(dir1, dir2, height, width, direction = False):
             sprites.append(surface)
 
         if direction:
-            all_sprites[img.replace(".png", "") + "_right"] + sprites
-            all_sprites[img.replace(".png", "") + "_left"] + flip(sprites)
+            all_sprites[img.replace(".png", "") + "_right"] = sprites
+            all_sprites[img.replace(".png", "") + "_left"] = flip(sprites)
         else:
-            all_sprites[img.replace(".png", "")] + sprites
+            all_sprites[img.replace(".png", "")] = sprites
 
     return all_sprites
