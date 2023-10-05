@@ -10,11 +10,14 @@ from scripts.utility import get_img, handle_move
 WIDTH = 800
 HEIGHT = 450
 fps = 20
-player_velocity = 5
+
 
 pygame.init()
 pygame.display.set_caption('J Game')
 DISPLAYSURF = pygame.display.set_mode((WIDTH, HEIGHT))
+
+def flip(sprites):
+  return [pygame.transform.flip(sprite, True, False) for sprite in sprites]
 
 def load_spritesheet(dir1, dir2, height, width, direction = False):
   path = join("E:\Projects\J_Game\data", dir1, dir2)
@@ -34,10 +37,10 @@ def load_spritesheet(dir1, dir2, height, width, direction = False):
           sprites.append(surface)
 
       if direction:
-          all_sprites[img.replace(".png", "") + "_right"] + sprites
-          all_sprites[img.replace(".png", "") + "_left"] + flip(sprites)
+          all_sprites[img.replace(".png", "") + "_right"] = sprites
+          all_sprites[img.replace(".png", "") + "_left"] = flip(sprites)
       else:
-          all_sprites[img.replace(".png", "")] + sprites
+          all_sprites[img.replace(".png", "")] = sprites
 
   return all_sprites
 
@@ -97,11 +100,12 @@ class Player(pygame.sprite.Sprite):
   def draw(self, window):
     window.blit(self.sprite, (self.rect.x, self.rect.y))
 
-def flip(sprites):
-  return [pygame.transform.flip(sprite, True, False) for sprite in sprites]
-
 def draw(display, image, coordinates):
   display.blit(image, coordinates)
+  pygame.display.update()
+
+def draw_player(display, player):
+  player.draw(display)
   pygame.display.update()
 
 def main(display):
@@ -123,8 +127,10 @@ def main(display):
       clock.tick(fps)
     draw(display, sky, [0, 0])
     draw(display, ground, [0, 300])
+    draw_player(display, player)
     player.loop(fps)
     handle_move(player)
+
 
 def ending(self):
   p = ['ending_1.png', 'ending_2.png', 'ending_3.png']
