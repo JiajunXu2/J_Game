@@ -5,7 +5,7 @@ class Player(pygame.sprite.Sprite):
   GRAVITY = 1
   COLOR = (255, 0, 0)
   SPRITES = load_spritesheet("images", "player_char", 32, 32, True)
-  ANIMATION_DELAY = 3
+  ANIMATION_DELAY = 6
 
   def __init__(self, x, y, width, height) -> None:
     self.rect = pygame.Rect(x, y , width, height)

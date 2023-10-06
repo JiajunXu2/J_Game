@@ -33,7 +33,7 @@ def load_spritesheet(dir1, dir2, height, width, direction = False):
           surface = pygame.Surface((width, height), pygame.SRCALPHA, 32)
           rect = pygame.Rect(i * width, 0, width, height)
           surface.blit(sprite_sheet, (0, 0), rect)
-          sprites.append(surface)
+          sprites.append(pygame.transform.scale2x(surface))
 
       if direction:
           all_sprites[img.replace(".png", "") + "_right"] = sprites
@@ -47,7 +47,7 @@ class Player(pygame.sprite.Sprite):
   GRAVITY = 1
   COLOR = (255, 0, 0)
   SPRITES = load_spritesheet("images", "player_char", 32, 32, True)
-  ANIMATION_DELAY = 5
+  ANIMATION_DELAY = 10
 
   def __init__(self, x, y, width, height) -> None:
     self.rect = pygame.Rect(x, y, width, height)
@@ -58,7 +58,7 @@ class Player(pygame.sprite.Sprite):
     self.animation_count = 0
     self.mask = None
   
-  def move(self, dy, dx):
+  def move(self, dx, dy):
     self.rect.x += dx
     self.rect.y += dy
 
@@ -126,8 +126,8 @@ def main(display):
       if event.type == pygame.MOUSEMOTION:
         print(event.pos)
       clock.tick(fps)
-    #draw(display, sky, [0, 0])
-    #draw(display, ground, [0, 300])
+    draw(display, sky, [0, 0])
+    draw(display, ground, [0, 300])
     player.loop(fps)
     handle_move(player)
     draw_player(display, player)
