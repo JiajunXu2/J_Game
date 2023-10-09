@@ -47,7 +47,7 @@ class Player(pygame.sprite.Sprite):
   GRAVITY = 1
   COLOR = (255, 0, 0)
   SPRITES = load_spritesheet("images", "player_char", 32, 32, True)
-  ANIMATION_DELAY = 10
+  ANIMATION_DELAY = 1
 
   def __init__(self, x, y, width, height) -> None:
     self.rect = pygame.Rect(x, y, width, height)
@@ -113,6 +113,7 @@ def main(display):
   clock = pygame.time.Clock()
   player = Player(100, 100, 50, 50)
   while True:
+    clock.tick(fps)
     sky = get_img("backgrounds/sky.png")
     ground = get_img("backgrounds/ground.png")
     for event in pygame.event.get():
@@ -125,7 +126,6 @@ def main(display):
         print("key up")
       if event.type == pygame.MOUSEMOTION:
         print(event.pos)
-      clock.tick(fps)
     draw(display, sky, [0, 0])
     draw(display, ground, [0, 300])
     player.loop(fps)
