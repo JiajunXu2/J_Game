@@ -5,7 +5,9 @@ import pygame
 from os.path import join, isfile
 from os import listdir
 from scripts.entities import PhysicsEntity
-from scripts.utility import get_img, handle_move
+from scripts.utility import *
+from scripts.block import Block
+from scripts.objects import Object
 
 WIDTH = 800
 HEIGHT = 450
