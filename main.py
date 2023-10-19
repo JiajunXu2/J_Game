@@ -21,7 +21,7 @@ def flip(sprites):
   return [pygame.transform.flip(sprite, True, False) for sprite in sprites]
 
 def load_spritesheet(dir1, dir2, height, width, direction = False):
-  path = join("E:\Projects\J_Game\data", dir1, dir2)
+  path = join("E:\Projects-Python\J_Game\data", dir1, dir2)
   print(path)
   images = [f for f in listdir(path) if isfile(join(path, f))]
 
@@ -103,10 +103,13 @@ class Player(pygame.sprite.Sprite):
   def draw(self, window):
     window.blit(self.sprite, (self.rect.x, self.rect.y))
 
-def draw(display, image, coordinates):
-  display.blit(image, coordinates)
+def draw(display, coordinates, image = None, block = None):
+  if image:
+    display.blit(image, coordinates)
+  if block:
+    pass
   pygame.display.update()
-  
+
 def draw_player(display, player):
   player.draw(display)
   pygame.display.update()
@@ -114,10 +117,13 @@ def draw_player(display, player):
 def main(display):
   clock = pygame.time.Clock()
   player = Player(100, 100, 50, 50)
+  #block = Block(0, 0, 96)
+  sky = get_img("backgrounds/sky.png")
+  ground = get_img("backgrounds/ground.png")
+  draw(display, [0, 0], sky)
+  draw(display, [0, 300], ground)
   while True:
     clock.tick(fps)
-    sky = get_img("backgrounds/sky.png")
-    ground = get_img("backgrounds/ground.png")
     for event in pygame.event.get():
       if event.type == pygame.QUIT:
         pygame.quit()
@@ -128,8 +134,9 @@ def main(display):
         print("key up")
       if event.type == pygame.MOUSEMOTION:
         print(event.pos)
-    draw(display, sky, [0, 0])
-    draw(display, ground, [0, 300])
+    #draw(display, block, [0, 0])
+    draw(display, [0, 0], sky)
+    draw(display, [0, 300], ground)
     player.loop(fps)
     handle_move(player)
     draw_player(display, player)

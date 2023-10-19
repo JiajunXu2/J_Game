@@ -1,6 +1,7 @@
 import pygame
+import os
 from os.path import join
-IMAGE_PATH = 'E:/Projects/J_Game/data/images/'
+IMAGE_PATH = 'E:/Projects-Python/J_Game/data/images/'
 PLAYER_VELOCITY = 8
 
 def get_img(path):
@@ -28,10 +29,10 @@ def handle_vertical_collision(player, objects, y_velocity):
         collided_objects.append(obj)
     return collided_objects
 
-def load_block(self, size, name):
-        path = join("E:\Projects\J_Game\data\images", "terrain", name)
-        image = pygame.image.load(path).convert_alpha()
-        surface = pygame.Surface((size, size), pygame.SRCALPHA)
-        rect = pygame.Rect(96, 0, (size, size))
-        surface.blit(image, (0, 0), rect)
-        return pygame.transform.scale2x(surface)
+def load_block(size, name):
+    path = join("E:\Projects-Python\J_Game\data\images", "terrain", name)
+    image = pygame.image.load(path).convert_alpha()
+    surface = pygame.Surface((size, size), pygame.SRCALPHA)
+    rect = pygame.Rect(96, 0, size, size)
+    surface.blit(image, (0, 0), rect)
+    return pygame.transform.scale2x(surface)
